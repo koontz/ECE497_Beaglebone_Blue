@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Spark Fun Robot</title>
+
+    <script src="/static/socket.io.js"></script>
+
+    <link href="static/matrixLED.css" rel="stylesheet" type="text/css"/>
+    <link href="static/js/jquery-ui.css" rel="stylesheet" type="text/css"/>
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/jquery-ui.min.js"></script>
+  </head>
+  <body>
+  <b>Board LEDs</b>
+<p/>
+    <button id="connect" onClick='connect()'/>Connect</button>
+    <button id="disconnect" onClick='disconnect()'>Disconnect</button>
+</p>
+<p/>
+    <button id="toggleRed" onClick='toggleRed()'/>Toggle Red LED</button>
+    <button id="toggleGreen" onClick='toggleGreen()'>Toggle Green LED</button>
+</p>
+<p/>
+
+
+<b>Matrix LED modified demo from the <a href="http://elinux.org/index.php?title=Category:ECE497" target="_blank">32-bit Embedded Linux Class</a>.</b>
+</p>
+    <div id="bottom"><p id="status">Waiting for input</p></div>
+
+<div id="signature">By <i>Alvin Koontz</i></div>
+<br/>
+<p/>
+<!-- This is down here because the page has to be created before it can
+be modified 
+<script src="static/matrixLED.js"></script>
+-->
+<script src="static/sparkFun.js"></script>
+
+</body>
+</html>
