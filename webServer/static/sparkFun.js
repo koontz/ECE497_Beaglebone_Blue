@@ -2,6 +2,9 @@ var socket;
 var red=0;
 var green=0;
 
+$("#slider1").slider({min:0, max:15, slide: function(event, ui) {
+    socket.emit("servo", {index: 1, position: ui.value});
+    }});
 function toggleRed(){
     socket.emit('red',0);
 }
