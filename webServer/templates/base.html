@@ -17,13 +17,60 @@
     <button id="disconnect" onClick='disconnect()'>Disconnect</button>
 </p>
 <p/>
+    Beagle Bone Blue LEDS
     <button id="toggleRed" onClick='toggleRed()'/>Toggle Red LED</button>
     <button id="toggleGreen" onClick='toggleGreen()'>Toggle Green LED</button>
 </p>
-<p>
-Servo
-<div id="slider1"></div>
-</p>
+<div>
+    <p>
+        Tilt Servo
+        <div id="slider1"></div>
+    </p>
+    <p>
+        Rotate Servo
+        <div id="slider2"></div>
+    </p>
+</div>
+<div>
+    <p>
+        <button id="leftBump" onClick='readLeftBumper()'>Read Left Bump</button>
+        <b id="leftBumperResult">0</b>
+    </p>
+    <p>
+        <button id="rightBump" onClick='readRightBumper()'>Read Right Bump</button>
+        <b id="rightBumperResult">0</b>
+    </p>
+</div>
+<div>
+    <p>
+        <button id="leftSonic" onClick='readLeftSonic()'>Read Left Sonic</button>
+        <b id="leftSonicResult">0</b>
+    </p>
+    <p>
+        <button id="rightSonic" onClick='readRightSonic()'>Read Right Sonic</button>
+        <b id="rightSonicResult">0</b>
+    </p>
+</div>
+<div>
+    <p>
+        <button id="leftEn" onClick='readLeftEn()'>Read Left Encoder</button>
+        <b id="leftEnResult">0</b>
+    </p>
+    <p>
+        <button id="rightEn" onClick='readRightEn()'>Read Right Encoder</button>
+        <b id="rightEnResult">0</b>
+    </p>
+</div>
+<div>
+    <p>
+        <button id="leftLine" onClick='readLeftLine()'>Read Left Line</button>
+        <b id="leftLineResult">0</b>
+    </p>
+    <p>
+        <button id="rightLine" onClick='readRightLine()'>Read Right Line</button>
+        <b id="rightLineResult">0</b>
+    </p>
+</div>
 <p/>
     <h1><a href="../html/cameraPage.html">link</a></h1>
     <b>Matrix LED modified demo from the <a href="http://elinux.org/index.php?title=Category:ECE497" target="_blank">32-bit Embedded Linux Class</a>.</b>

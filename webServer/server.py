@@ -58,6 +58,13 @@ def toggleRed(sid, message):
     robo.set_led(GREEN,green)
     sio.emit('green',red)
 
+@sio.on('read',namespace='/')
+def read(sid,message):
+    result = '1'
+    sio.emit('read',{'side': message['side'],
+                     'sensor': message['sensor'],
+                     'value': result})
+
 if(__name__ == "__main__"):
     #starts the server
     robo.initialize_cape()
