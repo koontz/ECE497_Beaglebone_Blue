@@ -3,10 +3,10 @@ var red=0;
 var green=0;
 
 $("#slider1").slider({min:-90, max:90, slide: function(event, ui) {
-    socket.emit("servo", {index: 1, position: ui.value});
+    socket.emit("servo", {index: 3, position: ui.value});
     }});
 $("#slider2").slider({min:-90, max:90, slide: function(event, ui) {
-    socket.emit("servo", {index: 2, position: ui.value});
+    socket.emit("servo", {index: 4, position: ui.value});
     }});
 function status_update(txt){
     $('#status').html(txt)
@@ -34,6 +34,10 @@ I dont think we care about reconnecting right now
     });
     socket.on('green',function(data){
         green = data;
+    });
+    socket.on('sendPosition',function(data){
+        console.log("recv"+data.x);
+        $('#id'+data.x+'_'+data.y).addClass("blue");
     });
     socket.on('read',function(data){
         var index = "#"+data.side+data.sensor +"Result";
@@ -76,5 +80,23 @@ function readLeftLine(){
 function readRightLine(){
     socket.emit('read',{side: 'right',sensor: 'Line'});
 }
+function readCamPosition(){
+    socket.emit('getPosition',0);
+}
 
 connect();
+document.addEventListener('keydown', function(event) {
+    if(event.keyCode == 37) {
+        socket.emit('move','left');
+        console.log('left');
+    }else if(event.keyCode == 38) {
+        socket.emit('move','up');
+        console.log('up');
+    }else if(event.keyCode == 40) {
+        socket.emit('move','down');
+        console.log('down');
+    }else if(event.keyCode == 39) {
+        socket.emit('move','right');
+        console.log('right');
+    }
+});

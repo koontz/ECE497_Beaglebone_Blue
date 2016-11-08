@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import socketio
 import eventlet
 import eventlet.wsgi
@@ -26,7 +27,7 @@ def index():
 @sio.on('connect',namespace='/')
 def connect(sid, environ):
     pass
-	#print("Connected",environ)
+    #print("Connected",environ)
 
 @sio.on('matrix')
 def matrix(sid,message):
