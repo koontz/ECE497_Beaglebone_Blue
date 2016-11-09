@@ -7,4 +7,4 @@ sleep 0.5
 echo "Have to restart network addapter to get an ip Address"
 /etc/init.d/networking restart
 sleep 1
-ifconfig
+ifconfig wlan0 | grep 'inet '

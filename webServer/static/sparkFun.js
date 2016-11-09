@@ -8,6 +8,9 @@ $("#slider1").slider({min:-90, max:90, slide: function(event, ui) {
 $("#slider2").slider({min:-90, max:90, slide: function(event, ui) {
     socket.emit("servo", {index: 2, position: ui.value/90});
     }});
+$("#slider3").slider({min:0, max:50, slide: function(event, ui) {
+    socket.emit("throttle", ui.value/50);
+    }});
 function status_update(txt){
     $('#status').html(txt)
 }

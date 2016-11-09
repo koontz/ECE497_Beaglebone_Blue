@@ -57,6 +57,8 @@ green = 0
 red =0
 global run_flag
 run_flag=True
+global smpower #servo motor power variable
+smpower=0.15
 #the webpage handling
 @app.route('/')
 def index():
@@ -82,6 +84,11 @@ def servo(sid,message):
     angle = (message['position'])
     robo.send_servo_pulse_normalized(message['index'],c_float(angle))
 
+@sio.on('throttle')
+def servoMotor(sid,message):
+    global smpower
+    smpower=message
+
 @sio.on('red',namespace='/')
 def toggleRed(sid, message):
     global red
@@ -101,7 +108,7 @@ def read(sid,message):
     result = '_'
     sensor = message['sensor']
     side = message['side']
-    print(side)
+#    print(side)
     if(sensor == 'En'):
         result = 'Encoders do not work for this demo'
     elif(sensor == 'Bump'):
@@ -125,7 +132,8 @@ def read(sid,message):
                      'value': result})
 @sio.on('move',namespace='/')
 def move(sid,message):
-    throttle = 1.0
+    global smpower
+    throttle = smpower
     if(message=='up'):
         robo.send_servo_pulse_normalized(4,c_float(throttle))
         robo.send_servo_pulse_normalized(3,c_float(-throttle))
@@ -138,7 +146,7 @@ def move(sid,message):
     elif(message=='right'):
         robo.send_servo_pulse_normalized(4,c_float(throttle))
         robo.send_servo_pulse_normalized(3,c_float(throttle))
-    print message
+#    print message
 @sio.on('followBall',namespace='/')
 def followBall(sid,message):
     global run_flag
@@ -159,6 +167,8 @@ def setrun_flag(value):
 def trackBall():
     block       = Block()
     global run_flag
+    global smpower
+    power=smpower
     run_flag = True
     frame_index = 0
     
@@ -189,20 +199,29 @@ def trackBall():
             # Apply corrections to the pan/tilt gimbals with the goal #
             # of putting the target in the center of Pixy's focus.    #
         error_scale=(pan_error*0.5*PIXY_X_CENTER)/12000
-        right_angle=0.15+0.3*error_scale
-        left_angle=0.15-0.3*error_scale
-        
-        print(c_float(left_angle))
-        robo.send_servo_pulse_normalized(3,c_float(left_angle))
-        robo.send_servo_pulse_normalized(4,c_float(right_angle))
+        right_angle=power+power*2*error_scale
+        left_angle=power-power*2*error_scale        
+        if right_angle>=0:
+            right_angle=min(right_angle,1)*(-1)
+        else:
+            right_angle=max(right_angle,-1)*(-1)
+        if left_angle>=0:
+            left_angle=min(left_angle,1)
+        else:
+            left_angle=max(left_angle,-1)
+
+#        print("r",c_float(right_angle))        
+#        print("l",c_float(left_angle))
+        robo.send_servo_pulse_normalized(3,c_float(right_angle))
+        robo.send_servo_pulse_normalized(4,c_float(left_angle))
         oldright=right_angle
         oldleft=left_angle
         if (frame_index % 50) == 0:
             # If available, display block data once a second #
-            print 'frame %d:' % frame_index
-
+#            print 'frame %d:' % frame_index
+            power=smpower
             if count == 1:
-                print '  sig:%2d x:%4d y:%4d width:%4d height:%4d' % (block.signature, block.x, block.y, block.width, block.height)
+#                print '  sig:%2d x:%4d y:%4d width:%4d height:%4d' % (block.signature, block.x, block.y, block.width, block.height)
                 data = {'x': block.x, 'y': block.y,'width': block.width,'height': block.height}
                 with open('data.json', 'w') as outfile:
                     json.dump(data, outfile, indent=4, sort_keys=True, separators=(',', ':'))
@@ -219,8 +238,7 @@ if(__name__ == "__main__"):
     #starts the server
     robo.initialize_cape()
     robo.enable_servo_power_rail()
-    initPixy()
-    
+    initPixy()    
     
     app = socketio.Middleware(sio,app) #wraps app in socket io handling
     eventlet.wsgi.server(eventlet.listen(('',8090)),app) #starts the server
