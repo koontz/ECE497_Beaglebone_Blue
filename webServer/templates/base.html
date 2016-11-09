@@ -17,14 +17,8 @@
   </head>
   <body>
 <div class="container">
-
-        <div class="page-header">
-            <h1>Bootstrap grid examples</h1>
-            <p class="lead">Basic grid layouts to get you familiar with building within the Bootstrap grid system.</p>
-        </div>
     <div class="row">
-    <div class="col-md-8">.col-md-8
-
+    <div class="col-md-8">
         <b>Board LEDs</b>
         <p/>
             <button id="connect" onClick='connect()'/>Connect</button>
@@ -38,16 +32,14 @@
         <p/>
             Camera
             <button id="getPos" onClick='readCamPosition()'/>Get position</button>
-            <button id="toggleGreen" onClick='toggleGreen()'>Toggle Green LED</button>
         </p>
-        readCamPosition()
         <div>
             <p>
                 Tilt Servo
                 <div id="slider1"></div>
             </p>
             <p>
-                Rotate Servo
+                Pan Servo
                 <div id="slider2"></div>
             </p>
         </div>
@@ -92,15 +84,14 @@
             </p>
         </div>
         <p/>
-            <h1><a href="../html/cameraPage.html">link</a></h1>
-            <b>Matrix LED modified demo from the <a href="http://elinux.org/index.php?title=Category:ECE497" target="_blank">32-bit Embedded Linux Class</a>.</b>
+            <b>Demo from the <a href="http://elinux.org/index.php?title=Category:ECE497" target="_blank">32-bit Embedded Linux Class</a>.</b>
         </p>
         <div id="bottom"><p id="status">Waiting for input</p></div>
-        <div id="signature">By <i>Alvin Koontz</i></div>
+        <div id="signature">By <i>Alvin Koontz and Samual Lawerence</i></div>
         <br/>
         <p/>
     </div>
-    <div class="col-md-8">.col-md-4
+    <div class="col-md-8">
         <table id="camMatrix"></table>
     </div>
     </div>
