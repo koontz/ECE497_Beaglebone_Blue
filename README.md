@@ -6,3 +6,4 @@ TODO: should make these a script that can just be run
 pip install --upgrade Flask
 pip install python-socketio
 pip install eventlet
+pip install Adafruit_BBIO

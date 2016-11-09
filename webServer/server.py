@@ -5,6 +5,13 @@ import eventlet
 import eventlet.wsgi
 from flask import Flask, render_template
 from ctypes import cdll, c_float
+import Adafruit_BBIO.GPIO as GPIO
+
+Left_line = "P9_23"
+#Right_line = "P9_10"
+
+GPIO.setup(Left_line, GPIO.IN)
+#GPIO.setup(Right_line, GPIO.IN)
 
 #the path to the robot cape library file
 robo = cdll.LoadLibrary('/root/Robotics_Cape_Installer-master/libraries/libroboticscape.so')
@@ -38,11 +45,8 @@ def brightness(sid,message):
     pass
 
 @sio.on('servo')
-def brightness(sid,message):
-    print message
-    angle = (message['position']-7)/8.0
-    print angle
-    print c_float(angle)
+def servo(sid,message):
+    angle = (message['position'])
     robo.send_servo_pulse_normalized(message['index'],c_float(angle))
 
 @sio.on('red',namespace='/')
@@ -61,10 +65,46 @@ def toggleRed(sid, message):
 
 @sio.on('read',namespace='/')
 def read(sid,message):
-    result = '1'
+    result = '_'
+    sensor = message['sensor']
+    side = message['side']
+    print(side)
+    if(sensor == 'En'):
+        result = 'Encoders do not work for this demo'
+    elif(sensor == 'Bump'):
+        if(side == 'left'):
+            print(GPIO.input(Left_line))
+            result = str(GPIO.input(Left_line))
+        else:
+            result = str(GPIO.input(Left_line))
+    elif(sensor == 'Sonic'):
+        if(side == 'left'):
+            result = str(robo.get_adc_raw(3))
+        else:
+            result = str(robo.get_adc_raw(2))
+    elif(sensor == 'Line'):
+        if(side == 'left'):
+            result = str(robo.get_adc_raw(0))
+        else:
+            result = str(robo.get_adc_raw(1))
     sio.emit('read',{'side': message['side'],
-                     'sensor': message['sensor'],
+                     'sensor': sensor,
                      'value': result})
+@sio.on('move',namespace='/')
+def move(sid,message):
+    throttle = 1.0
+    if(message=='up'):
+        robo.send_servo_pulse_normalized(4,c_float(throttle))
+        robo.send_servo_pulse_normalized(3,c_float(-throttle))
+    elif(message=='down'):
+        robo.send_servo_pulse_normalized(4,c_float(-throttle))
+        robo.send_servo_pulse_normalized(3,c_float(throttle))
+    elif(message=='left'):
+        robo.send_servo_pulse_normalized(4,c_float(-throttle))
+        robo.send_servo_pulse_normalized(3,c_float(-throttle))
+    elif(message=='right'):
+        robo.send_servo_pulse_normalized(4,c_float(throttle))
+        robo.send_servo_pulse_normalized(3,c_float(throttle))
 
 if(__name__ == "__main__"):
     #starts the server

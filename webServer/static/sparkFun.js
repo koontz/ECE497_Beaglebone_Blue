@@ -3,10 +3,10 @@ var red=0;
 var green=0;
 
 $("#slider1").slider({min:-90, max:90, slide: function(event, ui) {
-    socket.emit("servo", {index: 3, position: ui.value});
+    socket.emit("servo", {index: 1, position: ui.value/90});
     }});
 $("#slider2").slider({min:-90, max:90, slide: function(event, ui) {
-    socket.emit("servo", {index: 4, position: ui.value});
+    socket.emit("servo", {index: 2, position: ui.value/90});
     }});
 function status_update(txt){
     $('#status').html(txt)
