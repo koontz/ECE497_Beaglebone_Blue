@@ -59,6 +59,10 @@ global run_flag
 run_flag=True
 global smpower #servo motor power variable
 smpower=0.15
+global xPos
+xPos=0
+global yPos
+yPos=0
 #the webpage handling
 @app.route('/')
 def index():
@@ -83,7 +87,12 @@ def brightness(sid,message):
 def servo(sid,message):
     angle = (message['position'])
     robo.send_servo_pulse_normalized(message['index'],c_float(angle))
-
+@sio.on('getPosition')
+def getPosition(sid,message):
+    global xPos
+    global yPos
+    data = {'x': xPos, 'y': (PIXY_MAX_Y - yPos)}
+    sio.emit('sendPosition',data)
 @sio.on('throttle')
 def servoMotor(sid,message):
     global smpower
@@ -168,6 +177,8 @@ def trackBall():
     block       = Block()
     global run_flag
     global smpower
+    global xPos
+    global yPos
     power=smpower
     run_flag = True
     frame_index = 0
@@ -216,15 +227,19 @@ def trackBall():
         robo.send_servo_pulse_normalized(4,c_float(left_angle))
         oldright=right_angle
         oldleft=left_angle
-        if (frame_index % 50) == 0:
+        if (frame_index % 20) == 0:
             # If available, display block data once a second #
 #            print 'frame %d:' % frame_index
             power=smpower
-            if count == 1:
+            if count > 0:
+                xPos=block.x
+                yPos=block.y
+                #data = {'x': xPos, 'y': yPos}
+                #sio.emit('sendPosition',data)
 #                print '  sig:%2d x:%4d y:%4d width:%4d height:%4d' % (block.signature, block.x, block.y, block.width, block.height)
-                data = {'x': block.x, 'y': block.y,'width': block.width,'height': block.height}
-                with open('data.json', 'w') as outfile:
-                    json.dump(data, outfile, indent=4, sort_keys=True, separators=(',', ':'))
+                # data = {'x': block.x, 'y': block.y,'width': block.width,'height': block.height}
+                # with open('data.json', 'w') as outfile:
+                #     json.dump(data, outfile, indent=4, sort_keys=True, separators=(',', ':'))
         frame_index = frame_index + 1
 def initPixy():
     pixy_init_status = pixy_init()

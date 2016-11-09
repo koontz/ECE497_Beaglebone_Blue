@@ -39,15 +39,16 @@ I dont think we care about reconnecting right now
         green = data;
     });
     socket.on('sendPosition',function(data){
+        $( ".camcell" ).removeClass( "blue" );
         console.log("recv"+data.x);
-        $('#id'+data.x+'_'+data.y).addClass("blue");
+        $('#id'+Math.round((data.x/319)*32)+'_'+Math.round((data.y/199)*32)).addClass("blue");
     });
     socket.on('read',function(data){
         var index = "#"+data.side+data.sensor +"Result";
         $(index).text(data.value);
     });
 }
-
+ 
 function disconnect(){
     socket.disconnect();
 }
@@ -94,6 +95,8 @@ function stopBall(){
 }
 
 connect();
+readCamPosition();
+setInterval(readCamPosition, 500);
 document.addEventListener('keydown', function(event) {
     if(event.keyCode == 37) {
         socket.emit('move','left');
