@@ -18,7 +18,7 @@
   <body>
 <div class="container">
     <div class="row">
-    <div class="col-md-8">
+    <div class="col-sm-6">
         <b>Board LEDs</b>
         <p/>
             <button id="connect" onClick='connect()'/>Connect</button>
@@ -32,6 +32,8 @@
         <p/>
             Camera
             <button id="getPos" onClick='readCamPosition()'/>Get position</button>
+            <button id="getPos" onClick='followBall()'/>Follow Ball Program</button>
+            <button id="getPos" onClick='stopBall()'/>Stop Program</button>
         </p>
         <div>
             <p>
@@ -55,11 +57,11 @@
         </div>
         <div>
             <p>
-                <button id="leftSonic" onClick='readLeftSonic()'>Read Left Sonic</button>
+                <button id="leftSonic" onClick='readLeftSonic()'>Read Left IR</button>
                 <b id="leftSonicResult">0</b>
             </p>
             <p>
-                <button id="rightSonic" onClick='readRightSonic()'>Read Right Sonic</button>
+                <button id="rightSonic" onClick='readRightSonic()'>Read Right IR</button>
                 <b id="rightSonicResult">0</b>
             </p>
         </div>
@@ -91,7 +93,7 @@
         <br/>
         <p/>
     </div>
-    <div class="col-md-8">
+    <div class="col-sm-6">
         <table id="camMatrix"></table>
     </div>
     </div>

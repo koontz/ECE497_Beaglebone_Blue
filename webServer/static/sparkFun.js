@@ -83,6 +83,12 @@ function readRightLine(){
 function readCamPosition(){
     socket.emit('getPosition',0);
 }
+function followBall(){
+    socket.emit('followBall',0);
+}
+function stopBall(){
+    socket.emit('stopBall',0);
+}
 
 connect();
 document.addEventListener('keydown', function(event) {
