@@ -105,6 +105,7 @@ def move(sid,message):
     elif(message=='right'):
         robo.send_servo_pulse_normalized(4,c_float(throttle))
         robo.send_servo_pulse_normalized(3,c_float(throttle))
+    print message
 
 if(__name__ == "__main__"):
     #starts the server
